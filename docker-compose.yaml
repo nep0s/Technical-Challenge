@@ -1,0 +1,21 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: user
+      POSTGRES_DB: postgres_db
+    ports:
+      - 5431:5431
+    volumes:
+      - ./data:/data
+
+  
+  app:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+    - ./:/app
