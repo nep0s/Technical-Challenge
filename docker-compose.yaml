@@ -3,13 +3,14 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_PASSWORD: admin
-      POSTGRES_USER: user
-      POSTGRES_DB: postgres_db
-    ports:
-      - 5431:5431
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
     volumes:
       - ./data:/data
+    restart: always
+    ports:
+      - "5432:5432"
 
   
   app:
@@ -18,4 +19,13 @@ services:
     ports:
       - 3000:3000
     volumes:
-    - ./:/app
+      - ./:/app
+    depends_on:
+      - db
+    environment: 
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      DB_HOST: db
+      EXTERNAL_PORT: 3000
+      NODE_ENV: ${NODE_ENV}
